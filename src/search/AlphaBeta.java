@@ -54,7 +54,7 @@ public class AlphaBeta {
                 root(status.getCurrentState(), status.isWhite(), N_INF, P_INF, depth);
                 statistics.calculateTime();
                 //tex.addRow(statistics); // LaTeX output
-                System.out.println(statistics); // Uncomment for statistics in stdout
+                //System.out.println(statistics); // Uncomment for statistics in stdout
 
                 // If this occurs, we have reached a terminal node on
                 // all fronts so no need to continue searching.
