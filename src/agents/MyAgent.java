@@ -1,6 +1,5 @@
 package agents;
 
-import board.Evaluator;
 import search.AlphaBeta;
 
 /**
@@ -17,7 +16,7 @@ public class MyAgent implements Agent {
         // Some test were run to get these values.
         // A nice improvement would be to update them as you play more games.
         this.status = new Status(width, height, playClock, role,
-                417,148,58,58,82);
+                new HeuristicValues(101,257,432,290,447));
     }
 
     @Override

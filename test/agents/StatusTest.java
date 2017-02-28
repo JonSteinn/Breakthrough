@@ -18,7 +18,7 @@ public class StatusTest {
 
     @Before
     public void setUp() throws Exception {
-        this.status = new Status(10, 10, 1, "white",1,1,1,1,1);
+        this.status = new Status(10, 10, 1, "white", new HeuristicValues(1,1,1,1,1));
         this.statusBlack = new Status(5,5,5,"black");
     }
 
@@ -61,6 +61,12 @@ public class StatusTest {
         assertTrue(this.status.getCurrentState().getBlack().contains(new Position(3,3)));
         assertFalse(this.status.getCurrentState().getBlack().contains(new Position(4,4)));
         assertFalse(this.status.getCurrentState().getWhite().contains(new Position(3,3)));
+    }
+
+    @Test
+    public void timeLimitTest() {
+        assertEquals(1 * 1000 - Rules.TIME_OFFSET, this.status.getTimeLimit());
+        assertEquals(5 * 1000 - Rules.TIME_OFFSET, this.statusBlack.getTimeLimit());
     }
 
 

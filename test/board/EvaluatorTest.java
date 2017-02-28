@@ -1,5 +1,6 @@
 package board;
 
+import agents.HeuristicValues;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,7 +23,7 @@ public class EvaluatorTest {
     @Test
     public void foo() {
         Rules r = new Rules(10,10,5);
-        new Evaluator(500,500,500,500,500,rules);
+        new Evaluator(new HeuristicValues(500,500,500,500,500),rules);
     }
 
     @Test
@@ -30,11 +31,13 @@ public class EvaluatorTest {
         for (int j = 0; j < 1000; j++) { // 1000 test from clean boards
             Rules rules = new Rules((int)(Math.random() * 8) + 3, (int)(Math.random() * 6) + 5, 1);
             Evaluator ev = new Evaluator( // Value don't matter for this test
+                    new HeuristicValues(
                     1,
                     2,
                     3,
                     4,
-                    5,
+                    5
+                    ),
                     rules
             );
 
@@ -151,5 +154,26 @@ public class EvaluatorTest {
         assertFalse(winBlack());
         this.state.getBlack().add(new Position(3,1));
         assertTrue(winBlack());
+    }
+
+    @Test
+    public void changeValuesTest() {
+        // Using to toString since does not have an equals method
+        String expected = "count: 1\n" +
+                "furthest: 2\n" +
+                "movable: 3\n" +
+                "unhindered: 4\n" +
+                "lane control: 5\n" +
+                "nextWin: 134";
+        Evaluator ev = new Evaluator(new HeuristicValues(1,2,3,4,5), new Rules(3,5,5));
+        assertEquals(expected, ev.toString());
+        expected = "count: 5\n" +
+                "furthest: 4\n" +
+                "movable: 3\n" +
+                "unhindered: 2\n" +
+                "lane control: 1\n" +
+                "nextWin: 176";
+        ev.setValues(new HeuristicValues(5,4,3,2,1), new Rules(5,5,5));
+        assertEquals(expected, ev.toString());
     }
 }

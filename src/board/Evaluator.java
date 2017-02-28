@@ -1,6 +1,6 @@
 package board;
 
-import javafx.geometry.Pos;
+import agents.HeuristicValues;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -77,52 +77,24 @@ public class Evaluator {
     }
 
 
-    private int countValue;
-    private int furthestValue;
-    private int movableValue;
-    private int unhinderedValue;
-    private int laneControlValue;
+    private HeuristicValues hValues;
     private int winNextValue;
 
-    /**
-     * Constructor for evaluation.
-     *
-     * @param countValue int (number of pawns)
-     * @param furthestValue int (most advanced pawn)
-     * @param movableValue int (number of pawns that can move)
-     * @param unhinderedValue int (number of pawns such that they have a clear path to a goal state, times their advancement)
-     * @param laneControlValue int (number of columns controlled)
-     * @param rules rules
-     */
-    public Evaluator(int countValue,
-                     int furthestValue,
-                     int movableValue,
-                     int unhinderedValue,
-                     int laneControlValue,
-                     Rules rules) {
-        this.setValues(countValue, furthestValue, movableValue, unhinderedValue, laneControlValue, rules);
+    public Evaluator(HeuristicValues hValues, Rules rules) {
+        this.setValues(hValues, rules);
     }
 
     private int calculateWinNextValue(Rules rules) {
-        return countValue * rules.width * 2
-                        + furthestValue * rules.height
-                        + movableValue * rules.width * 2
-                        + unhinderedValue * rules.width * (2 * rules.height - 3)
-                        + laneControlValue * rules.width
+        return this.hValues.getCountValue() * rules.width * 2
+                        + this.hValues.getFurthestValue() * rules.height
+                        + this.hValues.getMovableValue() * rules.width * 2
+                        + this.hValues.getUnhinderedValue() * rules.width * (2 * rules.height - 3)
+                        + this.hValues.getLaneControlValue() * rules.width
                         + 1;
     }
 
-    public void setValues(int countValue,
-                          int furthestValue,
-                          int movableValue,
-                          int unhinderedValue,
-                          int laneControlValue,
-                          Rules rules) {
-        this.countValue = countValue;
-        this.furthestValue = furthestValue;
-        this.movableValue = movableValue;
-        this.unhinderedValue = unhinderedValue;
-        this.laneControlValue = laneControlValue;
+    public void setValues(HeuristicValues hValues, Rules rules) {
+        this.hValues = hValues;
         // Always set so that it is greater than the max of others combined.
         this.winNextValue = calculateWinNextValue(rules);
     }
@@ -220,11 +192,11 @@ public class Evaluator {
             winNext = 0;
         }
 
-        return count * this.countValue +
-                furthest * this.furthestValue +
-                canMove * this.movableValue +
-                unhindered * this.unhinderedValue +
-                controlled.size() * this.laneControlValue +
+        return count * this.hValues.getCountValue() +
+                furthest * this.hValues.getFurthestValue() +
+                canMove * this.hValues.getMovableValue() +
+                unhindered * this.hValues.getUnhinderedValue() +
+                controlled.size() * this.hValues.getLaneControlValue() +
                 ((winNext > 1) ? (whiteToPlay ? 2 : 1) : 0) * this.winNextValue;
 
     }
@@ -300,11 +272,11 @@ public class Evaluator {
             winNext = 0;
         }
 
-        return count * this.countValue +
-                furthest * this.furthestValue +
-                canMove * this.movableValue +
-                unhindered * this.unhinderedValue +
-                controlled.size() * this.laneControlValue +
+        return count * this.hValues.getCountValue() +
+                furthest * this.hValues.getFurthestValue() +
+                canMove * this.hValues.getMovableValue() +
+                unhindered * this.hValues.getUnhinderedValue() +
+                controlled.size() * this.hValues.getLaneControlValue() +
                 ((winNext > 1) ? (blackToPlay ? 2 : 1) : 0) * this.winNextValue;
     }
 
@@ -386,11 +358,11 @@ public class Evaluator {
 
     @Override
     public String toString() {
-        return "count: " + this.countValue + "\n" +
-                "furthest: " + this.furthestValue + "\n" +
-                "movable: " + this.movableValue + "\n" +
-                "unhindered: " + this.movableValue + "\n" +
-                "lane control: " + this.laneControlValue + "\n" +
+        return "count: " + this.hValues.getCountValue() + "\n" +
+                "furthest: " + this.hValues.getFurthestValue() + "\n" +
+                "movable: " + this.hValues.getMovableValue() + "\n" +
+                "unhindered: " + this.hValues.getUnhinderedValue() + "\n" +
+                "lane control: " + this.hValues.getLaneControlValue() + "\n" +
                 "nextWin: " + this.winNextValue;
     }
 }

@@ -14,11 +14,9 @@ public class Status {
 
     public final static String WHITE_NAME = "white";
     public final static String NO_MOVE = "noop";
-    public final static int TIME_OFFSET = 40;
 
     private boolean myTurn;
     private boolean isWhite;
-    private long timeLimit;
     private Rules rules;
     private State currentState;
     private Evaluator evaluator;
@@ -36,31 +34,11 @@ public class Status {
         this.currentState = new State(this.rules);
         this.isWhite = Status.WHITE_NAME.equals(role);
         this.myTurn = !this.isWhite;
-        this.timeLimit = time * 1000 - Status.TIME_OFFSET;
     }
 
-    /**
-     *
-     * @param w
-     * @param h
-     * @param time
-     * @param role
-     * @param countValue
-     * @param furthestValue
-     * @param movableValue
-     * @param unhinderedValue
-     * @param laneControlValue
-     */
-    public Status(int w, int h, int time, String role, int countValue, int furthestValue, int movableValue, int unhinderedValue, int laneControlValue) {
+    public Status(int w, int h, int time, String role, HeuristicValues heuristicValues) {
         this(w,h,time,role);
-        this.evaluator = new Evaluator(
-                countValue,
-                furthestValue,
-                movableValue,
-                unhinderedValue,
-                laneControlValue,
-                rules
-        );
+        this.evaluator = new Evaluator(heuristicValues, this.rules);
     }
 
     /**
@@ -82,7 +60,7 @@ public class Status {
      * @return long (ms)
      */
     public long getTimeLimit() {
-        return this.timeLimit;
+        return this.rules.timeLimit;
     }
 
     /**

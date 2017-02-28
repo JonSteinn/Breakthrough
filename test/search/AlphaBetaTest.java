@@ -1,5 +1,6 @@
 package search;
 
+import agents.HeuristicValues;
 import agents.Status;
 import board.*;
 import org.junit.Test;
@@ -12,19 +13,27 @@ import static org.junit.Assert.assertTrue;
 /**
  * Created by Jonni on 2/25/2017.
  */
+
 public class AlphaBetaTest {
+
+    @Test // Not a test
+    public void statCheck() {
+        Status s = new Status(5, 5, 10, "white",
+                new HeuristicValues(101,257,432,290,447));
+        System.out.println(new AlphaBeta(s).getBestMove());
+    }
 
     @Test
     public void timeTest() {
         long t = System.currentTimeMillis();
         Status s = new Status(5,5,2, "white",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
         new AlphaBeta(s).getBestMove();
         assertTrue(System.currentTimeMillis() - t < 2000L);
 
         t = System.currentTimeMillis();
         s = new Status(10,10,10, "white",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
         new AlphaBeta(s).getBestMove();
         assertTrue(System.currentTimeMillis() - t < 10000L);
     }
@@ -32,7 +41,7 @@ public class AlphaBetaTest {
     @Test
     public void simpleBestMoveTest() {
         Status s = new Status(5, 5, 1, "white",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
         s.getCurrentState().getWhite().clear();
         s.getCurrentState().getBlack().clear();
 
@@ -43,7 +52,7 @@ public class AlphaBetaTest {
         assertEquals(new Move(new int[]{2,2,3,3}).toString(), new AlphaBeta(s).getBestMove());
 
         s = new Status(5,5,1,"black",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
 
         s.getCurrentState().getWhite().clear();
         s.getCurrentState().getBlack().clear();
@@ -63,7 +72,7 @@ public class AlphaBetaTest {
     @Test
     public void drawOverLossTest() {
         Status s = new Status(3,5,5, "white",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
         s.getCurrentState().getWhite().clear();
         s.getCurrentState().getBlack().clear();
         s.getCurrentState().getWhite().add(new Position(2,2));
@@ -74,7 +83,7 @@ public class AlphaBetaTest {
         assertEquals(expected.toString(), new AlphaBeta(s).getBestMove());
 
         Status s2 = new Status(3,5,5, "black",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
         reflectionState(s, s2);
         assertEquals(new Move(reflection(from, s2.getRules()), reflection(to,s2.getRules())).toString(),
                 new AlphaBeta(s2).getBestMove());
@@ -83,22 +92,24 @@ public class AlphaBetaTest {
     @Test
     public void reflectionTest() {
         Status sW = new Status(10,10,1, "white",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,10));
         Status sB = new Status(10,10,1, "black",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,10));
         Move mW = parseMove(new AlphaBeta(sW).getBestMove());
         Move mB = parseMove(new AlphaBeta(sB).getBestMove());
+        System.out.println(mW);
+        System.out.println(mB);
         assertEquals(mW, new Move(diagonalReflection(mB.getFrom(),sB.getRules()), diagonalReflection(mB.getTo(), sB.getRules())));
     }
 
     @Test
     public void calledForNoMoveState() {
         Status sW = new Status(10,10,1,"white",
-                 5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
         sW.getCurrentState().getBlack().clear();
         sW.getCurrentState().getWhite().clear();
         Status sB = new Status(10,10,1,"black",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
         sB.getCurrentState().getBlack().clear();
         sB.getCurrentState().getWhite().clear();
 
@@ -117,9 +128,9 @@ public class AlphaBetaTest {
     @Test
     public void timeFailTest() {
         Status sW = new Status(5,5,0,"white",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
         Status sB = new Status(5,5,0,"black",
-                5,10,15,25,5);
+                new HeuristicValues(5,10,15,25,5));
 
         ArrayList<Move> whiteMoves = Actions.getWhiteActions(sW.getCurrentState());
         ArrayList<Move> blackMoves = Actions.getBlackActions(sB.getCurrentState());

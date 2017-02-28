@@ -1,5 +1,6 @@
 package board;
 
+import agents.Status;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -22,6 +23,9 @@ public class ActionsTest {
         this.state = cleanState(5, 5);
         this.expectedStates = new HashSet<>();
     }
+
+
+
 
     @Test
     public void orderedWhiteTest() {

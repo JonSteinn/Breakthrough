@@ -101,7 +101,7 @@ public class LaTeX {
     private void printTableRows() {
         for (int i = 0; i < this.table.size(); i++) {
             System.out.println("\t\t\t"
-                            + i
+                            + (i+1)
                             + " & "
                             + this.table.get(i).getExpansionCounter()
                             + " & "
