@@ -1,6 +1,7 @@
 package agents;
 
 import search.AlphaBeta;
+import search.TranspositionTable;
 
 /**
  * Created by Jonni on 2/24/2017.
@@ -10,13 +11,14 @@ import search.AlphaBeta;
 public class MyAgent implements Agent {
 
     private Status status;
+    private TranspositionTable table;
 
     @Override
     public void init(String role, int width, int height, int playClock) {
-        // Some test were run to get these values.
-        // A nice improvement would be to update them as you play more games.
-        this.status = new Status(width, height, playClock, role,
-                new HeuristicValues(101,257,432,290,447));
+
+        this.status = new Status(width, height, playClock, role, HeuristicValues.best);
+                //new HeuristicValues(101,257,432,290,447));
+        this.table = new TranspositionTable();
     }
 
     @Override
@@ -33,7 +35,7 @@ public class MyAgent implements Agent {
 
     @Override
     public void cleanup() {
-
+        this.table.clean();
     }
 
     /**

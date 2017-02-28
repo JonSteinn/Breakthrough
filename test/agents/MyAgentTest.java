@@ -28,12 +28,15 @@ public class MyAgentTest {
 
     @Test // Not really a test, takes some time!
     public void testSingleEstimate() {
-        int valueToChange = 0;
+        int valueToChange =
+                //2;
+                (int)(Math.random()*5);
+
         int changeAmount = 1; // Set to negative to decrease, positive to increase
         boolean player2change = true;
 
         //////////////////////////////////
-        if (true) { // <--- remove to run (or set as true)
+        if (false) { // <--- remove to run (or set as true)
             //////////////////////////////////
             Agent agent1 = new MyAgent();
             Agent agent2 = new MyAgent();
