@@ -19,32 +19,39 @@ public class TranspositionTable {
         this.table = new HashMap<>();
     }
 
-    public TableEntry findState(State state, boolean white) {
-        int hash = state.hashCode() % MAX_ENTRIES;
-        TableEntry[] entries = this.table.get(hash);
-        if (entries == null) {
-            return null;
-        }
-        TableEntry entry = entries[white ? WHITE_INDEX : BLACK_INDEX];
-        if (entry == null) return null;
-        if (entry.state.equals(state)) {
-            return entry;
-        }
-        return null;
+    public TableEntry findWhiteState(State state) {
+        TableEntry[] entries = getEntries(state);
+        if (entries == null) return null;
+        return checkEntry(state, entries[WHITE_INDEX]);
     }
 
-    public void addState(State state, int alpha, int beta, int depth, boolean white) {
+    public void addWhiteState(State state, int value, int depth) {
         int hash = state.hashCode();
         TableEntry[] entries = this.table.get(hash);
-        if (entries == null) {
-            this.table.put(
-                    hash,
-                    white ? new TableEntry[] { new TableEntry(state, alpha, beta, depth), null } :
-                            new TableEntry[] { new TableEntry(state, alpha, beta, depth), null }
-            );
-        } else {
-            entries[white ? WHITE_INDEX : BLACK_INDEX] = new TableEntry(state, alpha, beta, depth);
-        }
+        if (entries == null) this.table.put(hash, new TableEntry[] { new TableEntry(state, depth, value), null });
+        else entries[WHITE_INDEX] = new TableEntry(state, depth, value);
+    }
+
+    public TableEntry findBlackState(State state) {
+        TableEntry[] entries = getEntries(state);
+        if (entries == null) return null;
+        return checkEntry(state, entries[BLACK_INDEX]);
+    }
+
+    public void addBlackState(State state, int value, int depth) {
+        int hash = state.hashCode();
+        TableEntry[] entries = this.table.get(hash);
+        if (entries == null) this.table.put(hash, new TableEntry[]{ null, new TableEntry(state, depth, value)});
+        else entries[BLACK_INDEX] = new TableEntry(state, depth, value);
+    }
+
+    private TableEntry[] getEntries(State state) {
+        return this.table.get(state.hashCode() % MAX_ENTRIES);
+    }
+    private TableEntry checkEntry(State state, TableEntry entry) {
+        if (entry == null) return null;
+        if (entry.state.equals(state)) return entry;
+        return null;
     }
 
 }
