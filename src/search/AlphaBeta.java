@@ -13,7 +13,7 @@ import java.util.Queue;
 /**
  * Created by Jonni on 2/24/2017.
  *
- * Game tree search that uses negamax alpha beta pruning with ordering.
+ * Game tree search that uses Negamax Alpha Beta pruning with ordering.
  */
 
 public class AlphaBeta {
@@ -50,9 +50,8 @@ public class AlphaBeta {
             for (int depth = 1; ; depth++) {
 
                 statistics.reset(depth);
-
+                // Set best move
                 root(status.getCurrentState(), status.isWhite(), N_INF, P_INF, depth);
-
                 statistics.calculateTime();
                 //tex.addRow(statistics); // LaTeX output
                 System.out.println(statistics); // Uncomment for statistics in stdout
@@ -120,7 +119,7 @@ public class AlphaBeta {
                 int value = -blackAlphaBeta(
                         //State.createBlackToMoveChild(state, nextMove),        // Order by y-pos
                         //State.createBlackToMoveChild(state, next),            // No order
-                        next.state,                                 // Order by heuristic
+                        next.state,                                             // Order by heuristic
                         -beta, -alpha, depth - 1
                 );
 
@@ -148,7 +147,7 @@ public class AlphaBeta {
                 int value = -whiteAlphaBeta(
                         //State.createWhiteToMoveChild(state, next),          // No order
                         //State.createWhiteToMoveChild(state, nextMove),      // y-pos order
-                        next.state,                              // Heuristic order
+                        next.state,                                           // Heuristic order
                         -beta, -alpha, depth - 1);
                 if (value > alpha) {
                     alpha = value;
@@ -172,6 +171,8 @@ public class AlphaBeta {
      */
     private int whiteAlphaBeta(State state, int alpha, int beta, int depth) throws SearchTimeOutException {
         timeCheck();
+
+        // TODO: update if time for TT
 
         this.statistics.addExpansion();
         this.statistics.updateDepth(depth);
@@ -223,6 +224,9 @@ public class AlphaBeta {
      */
     private int blackAlphaBeta(State state, int alpha, int beta, int depth) throws SearchTimeOutException {
         timeCheck();
+
+        // TODO: update if time for TT
+
         this.statistics.addExpansion();
         this.statistics.updateDepth(depth);
 

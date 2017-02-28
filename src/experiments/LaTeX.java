@@ -11,6 +11,8 @@ import java.util.ArrayList;
  *
  * Used to generate LaTeX tables from statistics in
  * experiments and to draw Tikz figures of states.
+ * Tables and figures in the report are generated
+ * by this class.
  */
 public class LaTeX {
 

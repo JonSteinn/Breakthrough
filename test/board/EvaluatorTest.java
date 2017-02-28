@@ -1,6 +1,7 @@
 package board;
 
 import agents.HeuristicValues;
+import agents.Status;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,9 +22,37 @@ public class EvaluatorTest {
     }
 
     @Test
-    public void foo() {
-        Rules r = new Rules(10,10,5);
-        new Evaluator(new HeuristicValues(500,500,500,500,500),rules);
+    public void specialNotWinNextCaseWhite() {
+        Status s = new Status(10, 10, 10, "white", new HeuristicValues(0,0,0,0,0));
+
+        s.getCurrentState().getBlack().clear();
+        s.getCurrentState().getWhite().clear();
+
+        s.getCurrentState().getBlack().add(new Position(1,10));
+        s.getCurrentState().getBlack().add(new Position(2, 10));
+        s.getCurrentState().getBlack().add(new Position(3, 10));
+
+        s.getCurrentState().getWhite().add(new Position(1,9));
+        s.getCurrentState().getWhite().add(new Position(3,9));
+
+        assertEquals(0, s.getEvaluator().blackHeuristic(s.getCurrentState(), s.getRules()));
+    }
+
+    @Test
+    public void specialNotWinNextCaseBlack() {
+        Status s = new Status(10, 10, 10, "black", new HeuristicValues(0,0,0,0,0));
+
+        s.getCurrentState().getBlack().clear();
+        s.getCurrentState().getWhite().clear();
+
+        s.getCurrentState().getWhite().add(new Position(1,1));
+        s.getCurrentState().getWhite().add(new Position(2, 1));
+        s.getCurrentState().getWhite().add(new Position(3, 1));
+
+        s.getCurrentState().getBlack().add(new Position(1,2));
+        s.getCurrentState().getBlack().add(new Position(3,2));
+
+        assertEquals(0, s.getEvaluator().whiteHeuristic(s.getCurrentState(), s.getRules()));
     }
 
     @Test

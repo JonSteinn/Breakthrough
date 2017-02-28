@@ -176,4 +176,24 @@ public class StatisticsTest {
 
         LaTeX.drawState(s, r, "Win next for both players", "winNxt", 0.5);
     }
+
+    // Using toString since there is no equals
+    @Test
+    public void outputTest() {
+        this.stats.reset(20);
+        this.stats.updateDepth(5);
+        this.stats.updateDepth(4);
+        for (int i = 0; i < 10001; i++) this.stats.addExpansion();
+        this.stats.calculateTime();
+
+        boolean b = false;
+        for (int i = 0; i < 1000; i++) {
+            if (("Expansions: 10001\nMax depth: 16\nTime: " + i).equals(this.stats.toString())) {
+                b = true;
+                break;
+            }
+        }
+
+        assertTrue(b);
+    }
 }

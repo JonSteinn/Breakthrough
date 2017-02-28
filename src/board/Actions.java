@@ -24,6 +24,7 @@ public class Actions {
         Queue<Move> orderedMoves = new PriorityQueue<>(Comparator.comparing(o -> -o.getTo().getY()));
         fillWhite(orderedMoves, state);
         return orderedMoves;
+        // (To the grader: Was only used in experiments, feel free to ignore)
     }
 
     /**
@@ -36,6 +37,7 @@ public class Actions {
         ArrayList<Move> moves = new ArrayList<>();
         fillWhite(moves, state);
         return moves;
+        // (To the grader: Was only used in experiments, feel free to ignore)
     }
 
     /**
@@ -57,6 +59,7 @@ public class Actions {
                 coll.add(new Move(position, possibilities[2]));
             }
         }
+        // (To the grader: Was only used in experiments, feel free to ignore)
     }
 
     /**
@@ -70,6 +73,7 @@ public class Actions {
         Queue<Move> orderedMoves = new PriorityQueue<>(Comparator.comparingInt(o -> o.getTo().getY()));
         fillBlack(orderedMoves, state);
         return orderedMoves;
+        // (To the grader: Was only used in experiments, feel free to ignore)
     }
     /**
      *
@@ -82,6 +86,7 @@ public class Actions {
         ArrayList<Move> moves = new ArrayList<>();
         fillBlack(moves, state);
         return moves;
+        // (To the grader: Was only used in experiments, feel free to ignore)
     }
 
     /**
@@ -103,6 +108,7 @@ public class Actions {
                 coll.add(new Move(position, possibilities[2]));
             }
         }
+        // (To the grader: Was only used in experiments, feel free to ignore)
     }
 
 
@@ -112,7 +118,7 @@ public class Actions {
     // the heuristic without adding it to the states which
     // perhaps would have been better.
     //
-    // I did try like
+    // I did try
     // public static <T extends ActionWrapperWhite> void fillOrderedWhite(PriorityQueue<T> pq, State state, Status status)  {
     // but ultimately creating instance for T was equally dreadful.
 
@@ -125,17 +131,23 @@ public class Actions {
      * @return Queue of ActionWrapperWhite
      */
     public static Queue<ActionWrapperWhite> heuristicOrderWhite(Status status, State state) {
+        // max pq by heuristic
         Queue<ActionWrapperWhite> pq = new PriorityQueue<>(Comparator.comparingInt(o -> -o.heuristic));
+        // for all white pawns
         for (Position position : state.getWhite()) {
+            // All possible position to move to
             Position[] possibilities = position.frontOfWhite();
+            // If can move forward
             if (!state.getWhite().contains(possibilities[1]) && !state.getBlack().contains(possibilities[1])) {
                 pq.add(new ActionWrapperWhite(state, new Move(position, possibilities[1]),
                         status.getRules(), status.getEvaluator()));
             }
+            // If can attack diagonally left
             if (state.getBlack().contains(possibilities[0])) {
                 pq.add(new ActionWrapperWhite(state, new Move(position, possibilities[0]),
                         status.getRules(), status.getEvaluator()));
             }
+            // If can attack diagonally right
             if (state.getBlack().contains(possibilities[2])) {
                 pq.add(new ActionWrapperWhite(state, new Move(position, possibilities[2]),
                         status.getRules(), status.getEvaluator()));

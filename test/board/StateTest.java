@@ -23,12 +23,65 @@ public class StateTest {
         this.initState = new State(this.rules);
 
         this.advancedState = new State(this.rules);
-        Set<Position> maxi = this.advancedState.getWhite();
-        Set<Position> mini = this.advancedState.getBlack();
-        maxi.clear();
-        mini.clear();
-        maxi.add(new Position(2, 4));
-        mini.add(new Position(1, 3));
+        Set<Position> white = this.advancedState.getWhite();
+        Set<Position> black = this.advancedState.getBlack();
+        white.clear();
+        black.clear();
+        white.add(new Position(2, 4));
+        black.add(new Position(1, 3));
+    }
+
+    @Test
+    public void copyTest() {
+        assertTrue(new State(this.advancedState).equals(this.advancedState));
+    }
+
+    @Test
+    public void createWhiteMoveStateTest() {
+        State expected = new State(new Rules(5,5,5));
+        expected.getBlack().clear();
+        expected.getWhite().clear();
+        expected.getWhite().add(new Position(2,5));
+        expected.getBlack().add(new Position(1,3));
+        assertEquals(expected, State.createBlackToMoveChild(this.advancedState, new Move(new int[]{2,4,2,5})));
+    }
+
+    @Test
+    public void createBlackMoveStateTest() {
+        State expected = new State(new Rules(5,5,5));
+        expected.getBlack().clear();
+        expected.getWhite().clear();
+        expected.getWhite().add(new Position(2,4));
+        expected.getBlack().add(new Position(1,2));
+        assertEquals(expected, State.createWhiteToMoveChild(this.advancedState, new Move(new int[]{1,3,1,2})));
+    }
+
+    @Test
+    public void killMoveWhiteTest() {
+        State s = new State(new Rules(3,5,5));
+        s.getBlack().clear();
+        s.getWhite().clear();
+        s.getBlack().add(new Position(3,3));
+        s.getWhite().add(new Position(2,2));
+
+        s.whiteMove(new Move(new int[]{2,2,3,3}));
+        assertTrue(s.getBlack().isEmpty());
+        assertFalse(s.getWhite().contains(new Position(2,2)));
+        assertTrue(s.getWhite().contains(new Position(3,3)));
+    }
+
+    @Test
+    public void killMoveBlackTest() {
+        State s = new State(new Rules(3,5,5));
+        s.getBlack().clear();
+        s.getWhite().clear();
+        s.getBlack().add(new Position(3,3));
+        s.getWhite().add(new Position(2,2));
+
+        s.blackMove(new Move(new int[]{3,3,2,2}));
+        assertTrue(s.getWhite().isEmpty());
+        assertTrue(s.getBlack().contains(new Position(2,2)));
+        assertFalse(s.getBlack().contains(new Position(3,3)));
     }
 
     @Test

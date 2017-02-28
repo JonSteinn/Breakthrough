@@ -76,14 +76,25 @@ public class Evaluator {
         return DRAW;
     }
 
-
     private HeuristicValues hValues;
     private int winNextValue;
 
+    /**
+     * Constructor for evaluation class.
+     *
+     * @param hValues HeuristicValues
+     * @param rules Rules
+     */
     public Evaluator(HeuristicValues hValues, Rules rules) {
         this.setValues(hValues, rules);
     }
 
+    /**
+     * Makes sure that win next values outweighs the rest of the score variables
+     *
+     * @param rules Rules
+     * @return int
+     */
     private int calculateWinNextValue(Rules rules) {
         return this.hValues.getCountValue() * rules.width * 2
                         + this.hValues.getFurthestValue() * rules.height
@@ -93,6 +104,12 @@ public class Evaluator {
                         + 1;
     }
 
+    /**
+     * Setter for heuristic variables. This is called by the constructor.
+     *
+     * @param hValues HeuristicValues
+     * @param rules Rules
+     */
     public void setValues(HeuristicValues hValues, Rules rules) {
         this.hValues = hValues;
         // Always set so that it is greater than the max of others combined.

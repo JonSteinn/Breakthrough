@@ -12,7 +12,7 @@ import board.State;
  */
 public class Status {
 
-    public final static String WHITE_NAME = "white";
+    private final static String WHITE_NAME = "white";
     public final static String NO_MOVE = "noop";
 
     private boolean myTurn;
@@ -36,6 +36,15 @@ public class Status {
         this.myTurn = !this.isWhite;
     }
 
+    /**
+     * Constructor for an state evaluating agent.
+     *
+     * @param w int
+     * @param h int
+     * @param time int (s)
+     * @param role String
+     * @param heuristicValues HeuristicValues
+     */
     public Status(int w, int h, int time, String role, HeuristicValues heuristicValues) {
         this(w,h,time,role);
         this.evaluator = new Evaluator(heuristicValues, this.rules);

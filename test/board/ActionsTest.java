@@ -1,9 +1,12 @@
 package board;
 
+import agents.HeuristicValues;
 import agents.Status;
 import org.junit.Before;
 import org.junit.Test;
+import sun.net.www.http.PosterOutputStream;
 
+import javax.swing.*;
 import java.util.HashSet;
 import java.util.Queue;
 import java.util.Set;
@@ -24,6 +27,40 @@ public class ActionsTest {
         this.expectedStates = new HashSet<>();
     }
 
+    @Test
+    public void heuristicOrderedWhiteTest() {
+        Status s = new Status(5,5,5,"white", HeuristicValues.best);
+        s.getCurrentState().getBlack().clear();
+        s.getCurrentState().getWhite().clear();
+
+        s.getCurrentState().getWhite().add(new Position(2,2));
+        s.getCurrentState().getBlack().add(new Position(3,3));
+        s.getCurrentState().getBlack().add(new Position(1,3));
+        s.getCurrentState().getWhite().add(new Position(4,3));
+
+        assertEquals(new Move(new int[]{4,3,4,4}), Actions.heuristicOrderWhiteRoot(s, s.getCurrentState()).poll().move);
+
+        assertEquals(State.createBlackToMoveChild(s.getCurrentState(), new Move(new int[]{4,3,4,4})),
+                Actions.heuristicOrderWhite(s, s.getCurrentState()).poll().state);
+    }
+
+    @Test
+    public void heuristicOrderedBlackTest() {
+        Status s = new Status(5,5,5,"black", HeuristicValues.best);
+        s.nextPlayer();
+        s.getCurrentState().getBlack().clear();
+        s.getCurrentState().getWhite().clear();
+
+        s.getCurrentState().getBlack().add(new Position(1,3));
+        s.getCurrentState().getBlack().add(new Position(4,4));
+        s.getCurrentState().getWhite().add(new Position(3,3));
+        s.getCurrentState().getWhite().add(new Position(5,3));
+
+        assertEquals(new Move(new int[]{1,3,1,2}), Actions.heuristicOrderBlackRoot(s, s.getCurrentState()).poll().move);
+
+        assertEquals(State.createWhiteToMoveChild(s.getCurrentState(), new Move(new int[]{1,3,1,2})),
+                Actions.heuristicOrderBlack(s, s.getCurrentState()).poll().state);
+    }
 
 
 
