@@ -38,6 +38,10 @@ public class Statistics {
         this.time = System.currentTimeMillis();
     }
 
+    public int getTotalDepth() {
+        return this.totalDepth;
+    }
+
     /**
      * Increment expansion counter.
      */

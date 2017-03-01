@@ -8,8 +8,7 @@ package agents;
 public class HeuristicValues {
     // This was set by hand after running experiments, the agent uses this one
     public static final HeuristicValues best
-            = new HeuristicValues(3,6,3,10,2);
-            //= new HeuristicValues(80,185,142,56,124);
+            = new HeuristicValues(5,8,4,10,2);
 
     private int countValue;
     private int furthestValue;

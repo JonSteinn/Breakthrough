@@ -16,7 +16,7 @@ public class TableEntryTest {
 
     @Before
     public void setUp() throws Exception {
-        this.tEntry = new TableEntry(new State(new Rules(5,5,5)), 20, -5, TableEntry.EntryType.ALPHA);
+        this.tEntry = new TableEntry(new State(new Rules(5,5,5)), 20, -5);
     }
 
     @Test

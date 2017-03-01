@@ -7,19 +7,13 @@ import board.State;
  */
 public class TableEntry {
 
-    public enum EntryType {
-        ALPHA, BETA, BEST
-    }
-
     public State state;
     public int depth;
     public int value;
-    public EntryType type;
 
-    public TableEntry(State state, int depth, int value, EntryType type) {
+    public TableEntry(State state, int depth, int value) {
         this.state = state;
         this.depth = depth;
         this.value = value;
-        this.type = type;
     }
 }

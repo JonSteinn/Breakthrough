@@ -17,13 +17,11 @@ public class TranspositionTableTest {
 
     private Random rand;
     private TranspositionTable tTable;
-    private TableEntry.EntryType type;
 
     @Before
     public void setUp() throws Exception {
         this.tTable = new TranspositionTable();
         this.rand = new Random();
-        type = TableEntry.EntryType.ALPHA;
     }
 
     @Test
@@ -33,7 +31,7 @@ public class TranspositionTableTest {
         s.getWhite().clear();
         s.getWhite().add(new Position(2,2));
         s.getBlack().add(new Position(2,3));
-        this.tTable.addWhiteState(s, 3, 55, this.type);
+        this.tTable.addWhiteState(s, 3, 55);
 
         TableEntry te = this.tTable.findWhiteState(new State(s));
 
@@ -41,12 +39,12 @@ public class TranspositionTableTest {
         assertEquals(55, te.depth);
         assertEquals(3, te.value);
 
-        this.tTable.addWhiteState(new State(s), 15, 33, this.type);
+        this.tTable.addWhiteState(new State(s), 15, 555);
 
         te = this.tTable.findWhiteState(new State(s));
 
         assertEquals(new State(s), te.state);
-        assertEquals(33, te.depth);
+        assertEquals(555, te.depth);
         assertEquals(15, te.value);
     }
 
@@ -57,7 +55,7 @@ public class TranspositionTableTest {
         s.getWhite().clear();
         s.getWhite().add(new Position(20,21));
         s.getBlack().add(new Position(5,3));
-        this.tTable.addBlackState(s, -1234, 2, this.type);
+        this.tTable.addBlackState(s, -1234, 2);
 
         TableEntry te = this.tTable.findBlackState(new State(s));
 
@@ -65,7 +63,7 @@ public class TranspositionTableTest {
         assertEquals(2, te.depth);
         assertEquals(-1234, te.value);
 
-        this.tTable.addWhiteState(new State(s), -13523, 15, this.type);
+        this.tTable.addWhiteState(new State(s), -13523, 15);
 
         te = this.tTable.findWhiteState(new State(s));
 
@@ -76,8 +74,8 @@ public class TranspositionTableTest {
 
     @Test
     public void clearTest() {
-        this.tTable.addWhiteState(new State(new Rules(1,1,1)),5,5, this.type);
-        this.tTable.addBlackState(new State(new Rules(1,1,1)),5,5, this.type);
+        this.tTable.addWhiteState(new State(new Rules(1,1,1)),5,5);
+        this.tTable.addBlackState(new State(new Rules(1,1,1)),5,5);
         assertFalse(this.tTable.isEmpty());
         this.tTable.clean();
         assertTrue(this.tTable.isEmpty());
@@ -105,16 +103,16 @@ public class TranspositionTableTest {
                 }
             }
 
-            tTable.addBlackState(b, 5, 12, this.type);
+            tTable.addBlackState(b, 5, 12);
             assertEquals(null,tTable.findBlackState(a));
 
-            tTable.addWhiteState(a, 14, 30, this.type);
+            tTable.addWhiteState(a, 14, 30);
             assertEquals(null, tTable.findWhiteState(b));
 
-            tTable.addBlackState(a, 123, 51, this.type);
+            tTable.addBlackState(a, 123, 51);
             assertEquals(a, tTable.findBlackState(a).state);
 
-            tTable.addWhiteState(b, 135, 1124, this.type);
+            tTable.addWhiteState(b, 135, 1124);
             assertEquals(b, tTable.findWhiteState(b).state);
 
             done = true;

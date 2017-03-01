@@ -5,10 +5,17 @@ import board.Actions;
 import board.Evaluator;
 import board.Move;
 import board.State;
+import experiments.LaTeX;
 import experiments.Statistics;
 
 import java.util.ArrayList;
 import java.util.Queue;
+
+/* This has become very messy from all the experiments. I didn't want to remove
+ * any of the commented out code if I wanted to re-run some of them. Feel free
+ * to remove all this code in comments about transposition tables and other
+ * orderings (or 'non-ordering') if this is to much of a mess to read through.
+ */
 
 /**
  * Created by Jonni on 2/24/2017.
@@ -24,10 +31,7 @@ public class AlphaBeta {
     private Status status;
     private Move bestMove;
     private Statistics statistics;
-
-    /* While I was testing ordering, I had various ways iterating through the moves.
-     * I left the ones I didn't use in the code so I could keep experimenting.
-     * It somewhat messy but I prefer to have them in case I want to run more experiments. */
+    //private TranspositionTable table;
 
     /**
      * Constructor that performs the search and sets its bestMove variable to
@@ -35,12 +39,13 @@ public class AlphaBeta {
      *
      * @param status Status
      */
-    public AlphaBeta(Status status) {
+    public AlphaBeta(Status status   /*, TranspositionTable table  */   ) {
         this.time = System.currentTimeMillis();
         this.status = status;
         this.bestMove = null;
         this.statistics = new Statistics();
         int lastDepth = 0;
+        //this.table = table;
 
 
         //LaTeX tex = new LaTeX(); // LaTeX output for report, ignore
@@ -59,11 +64,14 @@ public class AlphaBeta {
                 // If this occurs, we have reached a terminal node on
                 // all fronts so no need to continue searching.
                 if (lastDepth >= statistics.getDepth()) {
+                    System.out.println("Total time: " + (System.currentTimeMillis() - this.time));
                     break;
                 }
                 lastDepth = statistics.getDepth();
             }
-        } catch (SearchTimeOutException ex) { }
+        } catch (SearchTimeOutException ex) {
+            System.out.println("Total time: time limit");
+        }
         //tex.createTable("caption", "label"); // LaTeX output
     }
 
@@ -100,8 +108,6 @@ public class AlphaBeta {
      */
     private void root(State state, boolean whiteToPlay, int alpha, int beta, int depth) throws SearchTimeOutException {
 
-        // TODO: update if time for TT
-
         this.statistics.addExpansion();
 
         if (whiteToPlay) { // If agent is white
@@ -132,6 +138,10 @@ public class AlphaBeta {
 
                 }
             }
+
+            ///////////////////// Transposition Table ////////////////////////
+            // this.table.addWhiteState(state, alpha, statistics.getTotalDepth());
+
         } else { // If agent is black
 
             // ArrayList<Move> mv = Actions.getBlackActions(state);                                     // No order
@@ -156,6 +166,10 @@ public class AlphaBeta {
                     this.bestMove = next.move;          // heuristic order
                 }
             }
+
+            ///////////////////// Transposition Table ////////////////////////
+            // this.table.addBlackState(state, alpha, statistics.getTotalDepth());
+
         }
     }
 
@@ -172,8 +186,6 @@ public class AlphaBeta {
     private int whiteAlphaBeta(State state, int alpha, int beta, int depth) throws SearchTimeOutException {
         timeCheck();
 
-        // TODO: update if time for TT
-
         this.statistics.addExpansion();
         this.statistics.updateDepth(depth);
 
@@ -188,6 +200,13 @@ public class AlphaBeta {
         if (depth == 0) {
             return status.getEvaluator().whiteHeuristic(state, status.getRules());
         }
+
+        ///////////////////// Transposition Table ////////////////////////
+        //TableEntry tEntry;
+        //if (((tEntry = this.table.findWhiteState(state)) != null)
+        //        && (tEntry.depth >= (statistics.getTotalDepth() - depth))) {
+        //    return tEntry.value;
+        //}
 
         //ArrayList<Move> mv = Actions.getWhiteActions(state);                                  // no order
         //Queue<Move> pq = Actions.getOrderedByFurthestWhiteActions(state);                     // y-pos order
@@ -209,6 +228,11 @@ public class AlphaBeta {
                 break;
             }
         }
+
+        ///////////////////// Transposition Table ////////////////////////
+        //table.addWhiteState(state, alpha, this.statistics.getTotalDepth() - depth);
+
+
         return alpha;
     }
 
@@ -225,8 +249,6 @@ public class AlphaBeta {
     private int blackAlphaBeta(State state, int alpha, int beta, int depth) throws SearchTimeOutException {
         timeCheck();
 
-        // TODO: update if time for TT
-
         this.statistics.addExpansion();
         this.statistics.updateDepth(depth);
 
@@ -241,6 +263,13 @@ public class AlphaBeta {
         if (depth == 0) {
             return status.getEvaluator().blackHeuristic(state, status.getRules());
         }
+
+        ///////////////////// Transposition Table ////////////////////////
+        //TableEntry tEntry;
+        //if (((tEntry = this.table.findBlackState(state)) != null)
+        //              && (tEntry.depth >= (statistics.getTotalDepth() - depth))) {
+        //    return tEntry.value;
+        //}
 
         //ArrayList<Move> mv = Actions.getBlackActions(state);                                    // no order
         //Queue<Move> pq = Actions.getOrderedByFurthestBlackActions(state);                       // y-pos order
@@ -262,6 +291,10 @@ public class AlphaBeta {
                 break;
             }
         }
+
+        ///////////////////// Transposition Table ////////////////////////
+        //table.addBlackState(state, alpha, this.statistics.getTotalDepth() - depth);
+
         return alpha;
     }
 

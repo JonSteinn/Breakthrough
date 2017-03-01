@@ -29,7 +29,7 @@ public class MyAgentTest {
     @Test // Not really a test, takes some time!
     public void testSingleEstimate() {
         int valueToChange =
-                //2;
+                //1;
                 (int)(Math.random()*5);
 
         int changeAmount = 1; // Set to negative to decrease, positive to increase
@@ -91,19 +91,17 @@ public class MyAgentTest {
                 Rules rules = new Rules(5, 5, 1);
                 int results = head2head(agent1, agent2, rules, values1, values2);
                 if (results > 0) {
-                    System.out.println("AGENT 1 WINS!");
+                    System.out.println("AGENT 1 WINS!" + (((MyAgent)agent1).getStatus().isWhite() ? " (White)" : " (Black)"));
                     System.out.println("Win:\n" + ((MyAgent) agent1).getStatus().getEvaluator());
                     System.out.println("--------------------");
                     System.out.println("Lost:\n" + ((MyAgent) agent2).getStatus().getEvaluator());
                     System.out.println();
-                    agent2toRandomize = true;
                 } else if (results < 0) {
-                    System.out.println("AGENT 2 WINS!");
+                    System.out.println("AGENT 2 WINS!" + (((MyAgent)agent2).getStatus().isWhite() ? " (White)" : " (Black)"));
                     System.out.println("Win:\n" + ((MyAgent) agent2).getStatus().getEvaluator());
                     System.out.println("--------------------");
                     System.out.println("Lost:\n" + ((MyAgent) agent1).getStatus().getEvaluator());
                     System.out.println();
-                    agent2toRandomize = false;
                 } else {
                     System.out.println("Draw");
                 }
@@ -113,6 +111,8 @@ public class MyAgentTest {
 
     @Test
     public void beatsRandomAsWhite3X5Test() {
+        this.smart.cleanup();
+        this.random.cleanup();
         int sum = 0;
         for (int i = 0; i < 10; i++) {
             this.smart.init("white", 3, 5, 5);

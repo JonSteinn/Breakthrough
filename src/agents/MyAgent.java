@@ -11,14 +11,12 @@ import search.TranspositionTable;
 public class MyAgent implements Agent {
 
     private Status status;
-    private TranspositionTable table;
+    //private TranspositionTable table;
 
     @Override
     public void init(String role, int width, int height, int playClock) {
-
         this.status = new Status(width, height, playClock, role, HeuristicValues.best);
-                //new HeuristicValues(101,257,432,290,447));
-        this.table = new TranspositionTable();
+        //this.table = new TranspositionTable();
     }
 
     @Override
@@ -35,7 +33,12 @@ public class MyAgent implements Agent {
 
     @Override
     public void cleanup() {
-        this.table.clean();
+        /*
+        if (this.table != null) {
+            System.out.println("Cleaning " + this.table.size() + " entries");
+            this.table.clean();
+        }
+        */
     }
 
     /**
