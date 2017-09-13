@@ -11,7 +11,7 @@ import java.util.Set;
 public class Evaluator {
 
     /* Win/lose values are set to really high numbers but still less then P_INF / N_INF */
-    public static final int WIN_VALUE = 2000000000;
+    public static final int WIN_VALUE = 0x7FFFFFFF;
     public static final int LOSE_VALUE = -WIN_VALUE;
     public static final int DRAW_VALUE = 0;
 

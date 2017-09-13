@@ -135,7 +135,9 @@ public class AlphaBeta {
                     //this.bestMove = next;         // No order
                     //this.bestMove = nextMove;     // order by y-pos
                     this.bestMove = next.move;      // order by heuristics
-
+                }
+                if (alpha >= beta) { // Cut
+                    break;
                 }
             }
 
@@ -164,6 +166,9 @@ public class AlphaBeta {
                     //this.bestMove = next;             // no order
                     //this.bestMove = nextMove;         // y-pos order
                     this.bestMove = next.move;          // heuristic order
+                }
+                if (alpha >= beta) { // Cut
+                    break;
                 }
             }
 
